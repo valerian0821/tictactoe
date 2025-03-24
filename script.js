@@ -5,14 +5,14 @@ const GameBoard = (function () {
     for (let i = 0; i < rows; i++) {
         board[i] = [];
         for (let j = 0; j < columns; j++) {
-            board[i].push(placeMarker());
+            board[i].push(" ");
         }
     }
 
-    const getboard = () => board;
+    const getBoard = () => board;
 
-    const placeMarker = (marker = " ") => {
-        return marker;
+    const placeMarker = (marker = " ", row, column) => {
+        board[row][column] = marker;
     }
 
     // const checkAvailability = (row, column) => {
@@ -70,4 +70,22 @@ const GameBoard = (function () {
         }
         return winnerFound;
     }
+    return {
+        getBoard, placeMarker, checkAvailability, printBoard, checkForWinner
+    }
 })();
+
+GameBoard.getBoard();
+console.log(GameBoard.checkAvailability(0, 0));
+GameBoard.placeMarker("O", 0, 0);
+GameBoard.placeMarker("X", 0, 1);
+GameBoard.placeMarker("O", 1, 1);
+GameBoard.placeMarker("X", 0, 2);
+GameBoard.placeMarker("O", 2, 0);
+GameBoard.placeMarker("X", 1, 0);
+GameBoard.placeMarker("O", 2, 1);
+GameBoard.placeMarker("X", 2, 2);
+GameBoard.placeMarker("O", 1, 2);
+GameBoard.printBoard();
+console.log(GameBoard.checkForWinner());
+
