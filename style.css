@@ -5,3 +5,39 @@
     font-family: 'Courier New', Courier, monospace;
     font-size: 20px;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+}
+
+h1 {
+    font-size: 3rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+p {
+    font-size: 2rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+#title-div, #display-div {
+    flex-basis: 80px;
+}
+
+#board {
+    width: 600px;
+    height: 600px;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid black;
+}
+
+.cell {
+    border: 1px solid black;
+}
