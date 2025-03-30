@@ -41,3 +41,15 @@ p {
 .cell {
     border: 1px solid black;
 }
+
+#btn-div {
+    display: flex;
+    flex-basis: 100px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn {
+    border: 1px solid black;
+}

@@ -8,14 +8,16 @@ const GameBoard = (function () {
     let marker = player1.marker;
     let name = player1.name;
     const board = [];
-    for (let i = 0; i < rows; i++) {
-        board[i] = [];
-        for (let j = 0; j < columns; j++) {
-            board[i].push(" ");
+    
+    const getBoard = () => {
+        for (let i = 0; i < rows; i++) {
+            board[i] = [];
+            for (let j = 0; j < columns; j++) {
+                board[i].push(" ");
+            }
         }
+        return board;
     }
-
-    const getBoard = () => board;
 
     const getActiveMarker = () => marker;
 
@@ -54,6 +56,15 @@ const GameBoard = (function () {
 
     const UpdateNumOfTurns = () => {
         turnsTaken++;
+    }
+
+    const resetBoard = () => {
+        turnsTaken = 0;
+        marker = player1.marker;
+        name = player1.name;
+        for (let i = 0; i < board.length; i++) {
+            board.pop();
+        }
     }
 
     const checkForWinner = () => {
@@ -95,7 +106,7 @@ const GameBoard = (function () {
     }
     return {
         getBoard, placeMarker, checkAvailability, printBoard, checkForWinner, UpdateNumOfTurns, getTurnCount, getActiveMarker, getActiveName,
-        switchActiveMarker, switchActiveName
+        switchActiveMarker, switchActiveName, resetBoard
     }
 })();
 
@@ -166,6 +177,13 @@ function gameControllerConsole() {
     }
 }
 
+function startGame() {
+    let activeName = GameBoard.getActiveName();
+    DisplayController.displayPlayerTurn(activeName);
+    DisplayController.addCellListeners();
+    DisplayController.removeStartListener();
+}
+
 function gameControllerDisplay(row, col) {
 
     //Starts the game
@@ -184,13 +202,13 @@ function gameControllerDisplay(row, col) {
         let winnerFound = GameBoard.checkForWinner();
         if (winnerFound === true) {
             DisplayController.announceWinner(activeName);
-            DisplayController.removeListeners();
+            DisplayController.removeCellListeners();
             return;
         }
     }
     if (GameBoard.getTurnCount() === 9 && winnerFound === false) {
         DisplayController.announceDraw();
-        DisplayController.removeListeners();
+        DisplayController.removeCellListeners();
         return;
     }
     if (winnerFound === false) {
@@ -211,6 +229,9 @@ const DisplayController = (function () {
     const display = document.createElement("p");
 
     const boardDiv = document.createElement("div");
+    const btnDiv = document.createElement("div");
+    const startBtn = document.createElement("btn");
+    const restartBtn = document.createElement("btn");
 
     const displayGameTitle = () => {
         body.appendChild(titleDiv);
@@ -223,8 +244,6 @@ const DisplayController = (function () {
         body.appendChild(displayDiv);
         displayDiv.id = "display-div";
         displayDiv.appendChild(display);
-        let activeName = GameBoard.getActiveName();
-        DisplayController.displayPlayerTurn(activeName);
     }
 
     const displayBoard = () => {
@@ -244,6 +263,38 @@ const DisplayController = (function () {
         }
     }
 
+    const displayBtns = () => {
+        body.appendChild(btnDiv);
+        btnDiv.id = "btn-div";
+        startBtn.classList.add("btn");
+        startBtn.textContent = "Start Game";
+        restartBtn.classList.add("btn");
+        restartBtn.textContent = "Restart Game";
+        btnDiv.appendChild(startBtn);
+        btnDiv.appendChild(restartBtn);
+    }
+
+    const handleStartListener = () => {
+        startGame();
+    }
+
+    const removeStartListener = () => {
+        startBtn.removeEventListener("click", handleStartListener);
+    }
+
+    const addStartListener = () => {
+        startBtn.addEventListener("click", handleStartListener);
+    }
+
+    const addRestartListener = () => {
+        restartBtn.addEventListener("click", () => {
+            GameBoard.resetBoard();
+            removeCellListeners();
+            removeMarkers();
+            startGame();
+        });
+    }
+
     const handleCellClick = (event) => {
         if (event.target.classList.contains("cell")) {
             let row = event.target.dataset.row;
@@ -252,11 +303,11 @@ const DisplayController = (function () {
         }
     };
     
-    const addListeners = () => {
+    const addCellListeners = () => {
         boardDiv.addEventListener("click", handleCellClick);
     };
     
-    const removeListeners = () => {
+    const removeCellListeners = () => {
         boardDiv.removeEventListener("click", handleCellClick);
     };
 
@@ -264,6 +315,12 @@ const DisplayController = (function () {
         const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
         cell.textContent = marker;
     }
+
+    const removeMarkers = () => {
+        document.querySelectorAll(".cell").forEach(cell => {
+            cell.textContent = "";
+        });
+    };
 
     const displayPlayerTurn = (name) => {
         display.textContent = `It is ${name}'s turn.`;
@@ -278,30 +335,14 @@ const DisplayController = (function () {
     }
 
     return {
-        displayGameTitle, displayResult, displayBoard, addListeners, displayMarker, displayPlayerTurn, announceWinner, removeListeners, 
-        announceDraw
+        displayGameTitle, displayResult, displayBoard, displayBtns, addCellListeners, displayMarker, removeMarkers, displayPlayerTurn, announceWinner, 
+        removeCellListeners, announceDraw, addStartListener, removeStartListener, handleStartListener, addRestartListener
     }
 })();
-
 
 DisplayController.displayGameTitle();
 DisplayController.displayResult();
 DisplayController.displayBoard();
-DisplayController.addListeners();
-// gameController();
-
-
-// GameBoard.getBoard();
-// console.log(GameBoard.checkAvailability(0, 0));
-// GameBoard.placeMarker("O", 0, 0);
-// GameBoard.placeMarker("X", 0, 1);
-// GameBoard.placeMarker("O", 1, 1);
-// GameBoard.placeMarker("X", 0, 2);
-// GameBoard.placeMarker("O", 2, 0);
-// GameBoard.placeMarker("X", 1, 0);
-// GameBoard.placeMarker("O", 2, 1);
-// GameBoard.placeMarker("X", 2, 2);
-// GameBoard.placeMarker("O", 1, 2);
-// GameBoard.printBoard();
-// console.log(GameBoard.checkForWinner());
-
+DisplayController.displayBtns();
+DisplayController.addStartListener();
+DisplayController.addRestartListener();
