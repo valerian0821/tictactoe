@@ -185,7 +185,7 @@ function startGame() {
     DisplayController.openDialog();
 }
 
-function continueStartGame () {
+function continueStartGame() {
     GameBoard.updateNames();
     let activeName = GameBoard.getActiveName();
     let activeMarker = GameBoard.getActiveMarker();
@@ -194,7 +194,7 @@ function continueStartGame () {
     DisplayController.removeStartListener();
 }
 
-function handleNameSubmit (event) {
+function handleNameSubmit(event) {
     event.preventDefault();
     const player1Name = document.getElementById("player1").value;
     const player2Name = document.getElementById("player2").value;
@@ -393,11 +393,15 @@ const DisplayController = (function () {
     }
 })();
 
-DisplayController.displayGameTitle();
-DisplayController.displayResult();
-DisplayController.displayBoard();
-DisplayController.displayBtns();
-DisplayController.addStartListener();
-DisplayController.addRestartListener();
-DisplayController.createDialog();
-DisplayController.addFormBtnListener();
+function initializeGame() {
+    DisplayController.displayGameTitle();
+    DisplayController.displayResult();
+    DisplayController.displayBoard();
+    DisplayController.displayBtns();
+    DisplayController.addStartListener();
+    DisplayController.addRestartListener();
+    DisplayController.createDialog();
+    DisplayController.addFormBtnListener();
+}
+
+initializeGame();
