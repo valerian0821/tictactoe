@@ -29,6 +29,10 @@ const GameBoard = (function () {
         }
     }
 
+    const updateNames = () => {
+        name = player1.name;
+    }
+
     const getActiveName = () => name;
 
     const switchActiveName = (activeName) => {
@@ -106,7 +110,7 @@ const GameBoard = (function () {
     }
     return {
         getBoard, placeMarker, checkAvailability, printBoard, checkForWinner, UpdateNumOfTurns, getTurnCount, getActiveMarker, getActiveName,
-        switchActiveMarker, switchActiveName, resetBoard
+        switchActiveMarker, switchActiveName, resetBoard, updateNames
     }
 })();
 
@@ -178,10 +182,25 @@ function gameControllerConsole() {
 }
 
 function startGame() {
+    DisplayController.openDialog();
+}
+
+function continueStartGame () {
+    GameBoard.updateNames();
     let activeName = GameBoard.getActiveName();
     DisplayController.displayPlayerTurn(activeName);
     DisplayController.addCellListeners();
     DisplayController.removeStartListener();
+}
+
+function handleNameSubmit (event) {
+    event.preventDefault();
+    const player1Name = document.getElementById("player1").value;
+    const player2Name = document.getElementById("player2").value;
+    player1.name = player1Name;
+    player2.name = player2Name;
+    DisplayController.closeDialog();
+    continueStartGame();
 }
 
 function gameControllerDisplay(row, col) {
@@ -232,6 +251,7 @@ const DisplayController = (function () {
     const btnDiv = document.createElement("div");
     const startBtn = document.createElement("btn");
     const restartBtn = document.createElement("btn");
+    const dialog = document.createElement("dialog");
 
     const displayGameTitle = () => {
         body.appendChild(titleDiv);
@@ -274,6 +294,31 @@ const DisplayController = (function () {
         btnDiv.appendChild(restartBtn);
     }
 
+    const createDialog = () => {
+        dialog.innerHTML = `
+            <form>
+                <h3>Enter Your Names</h3>
+                <div>
+                    <label for="player1">Player 1 (X): </label>
+                    <input type="text" id="player1" name="player1" required>
+                </div>
+                <div>
+                    <label for="player2">Player 2 (O): </label>
+                    <input type="text" id="player2" name="player2" required>
+                </div>
+                <button id="dialog-btn" type="submit">Submit</button>
+            </form>`;
+        body.appendChild(dialog);
+    }
+
+    const openDialog = () => {
+        dialog.showModal();
+    }
+
+    const closeDialog = () => {
+        dialog.close();
+    }
+
     const handleStartListener = () => {
         startGame();
     }
@@ -311,6 +356,11 @@ const DisplayController = (function () {
         boardDiv.removeEventListener("click", handleCellClick);
     };
 
+    const addFormBtnListener = () => {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", handleNameSubmit);
+    }
+
     const displayMarker = (marker, row, col) => {
         const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
         cell.textContent = marker;
@@ -336,7 +386,8 @@ const DisplayController = (function () {
 
     return {
         displayGameTitle, displayResult, displayBoard, displayBtns, addCellListeners, displayMarker, removeMarkers, displayPlayerTurn, announceWinner, 
-        removeCellListeners, announceDraw, addStartListener, removeStartListener, handleStartListener, addRestartListener
+        removeCellListeners, announceDraw, addStartListener, removeStartListener, handleStartListener, addRestartListener, createDialog, 
+        addFormBtnListener, openDialog, closeDialog
     }
 })();
 
@@ -346,3 +397,5 @@ DisplayController.displayBoard();
 DisplayController.displayBtns();
 DisplayController.addStartListener();
 DisplayController.addRestartListener();
+DisplayController.createDialog();
+DisplayController.addFormBtnListener();
