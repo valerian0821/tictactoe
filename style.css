@@ -25,13 +25,23 @@ p {
     font-weight: bold;
 }
 
+button {
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 #title-div, #display-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-basis: 80px;
 }
 
 #board {
-    width: 600px;
-    height: 600px;
+    width: 450px;
+    height: 450px;
     display: grid;
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: repeat(3, 1fr);
@@ -39,6 +49,10 @@ p {
 }
 
 .cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6rem ;
     border: 1px solid black;
 }
 
@@ -53,3 +67,15 @@ p {
 .btn {
     border: 1px solid black;
 }
+
+dialog {
+    position: fixed; /* Ensures the dialog stays in place relative to the viewport */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers the dialog horizontally and vertically */
+    border: none; /* Optional: Removes the default border */
+    padding: 20px; /* Adds spacing inside the dialog */
+    background-color: white; /* Sets a background color for visibility */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow for better aesthetics */
+  }
+  

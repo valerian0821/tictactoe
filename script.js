@@ -251,8 +251,8 @@ const DisplayController = (function () {
 
     const boardDiv = document.createElement("div");
     const btnDiv = document.createElement("div");
-    const startBtn = document.createElement("btn");
-    const restartBtn = document.createElement("btn");
+    const startBtn = document.createElement("button");
+    const restartBtn = document.createElement("button");
     const dialog = document.createElement("dialog");
 
     const displayGameTitle = () => {
