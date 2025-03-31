@@ -188,7 +188,8 @@ function startGame() {
 function continueStartGame () {
     GameBoard.updateNames();
     let activeName = GameBoard.getActiveName();
-    DisplayController.displayPlayerTurn(activeName);
+    let activeMarker = GameBoard.getActiveMarker();
+    DisplayController.displayPlayerTurn(activeName, activeMarker);
     DisplayController.addCellListeners();
     DisplayController.removeStartListener();
 }
@@ -220,7 +221,7 @@ function gameControllerDisplay(row, col) {
     if (GameBoard.getTurnCount() >= 5) {
         let winnerFound = GameBoard.checkForWinner();
         if (winnerFound === true) {
-            DisplayController.announceWinner(activeName);
+            DisplayController.announceWinner(activeName, activeMarker);
             DisplayController.removeCellListeners();
             return;
         }
@@ -234,7 +235,8 @@ function gameControllerDisplay(row, col) {
         GameBoard.switchActiveMarker(activeMarker);
         GameBoard.switchActiveName(activeName);
         activeName = GameBoard.getActiveName();
-        DisplayController.displayPlayerTurn(activeName);
+        activeMarker = GameBoard.getActiveMarker();
+        DisplayController.displayPlayerTurn(activeName, activeMarker);
     }
 }
 
@@ -372,12 +374,12 @@ const DisplayController = (function () {
         });
     };
 
-    const displayPlayerTurn = (name) => {
-        display.textContent = `It is ${name}'s turn.`;
+    const displayPlayerTurn = (name, marker) => {
+        display.textContent = `(${marker}) ${name}'s Turn:`;
     }
 
-    const announceWinner = (name) => {
-        display.textContent = `${name} has won the game!`;
+    const announceWinner = (name, marker) => {
+        display.textContent = `(${marker}) ${name} has won the game!`;
     }
 
     const announceDraw = () => {
