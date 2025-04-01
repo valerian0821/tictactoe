@@ -75,7 +75,7 @@ const GameBoard = (function () {
         let winnerFound = false;
 
         //Checks top-left horizontally to top-right
-        if (board[0][0] === board[0][1] && board[0][0] === board[0][2]) {
+        if (board[0][0] === board[0][1] && board[0][0] === board[0][2] && board[0][0] !== " ") {
             winnerFound = true;
         
         //Checks top-left diagonally to bot-right
